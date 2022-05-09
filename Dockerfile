@@ -12,5 +12,5 @@ COPY . .
 
 RUN ["npm" ,"run", "build"]
 
-ENTRYPOINT [ "npm" ,"install","-g", "serve","&&" ,"serve","-s","build"]
+# ENTRYPOINT [ "npm" ,"install","-g", "serve","&&" ,"serve","-s","build"]
 
