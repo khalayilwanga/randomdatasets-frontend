@@ -63,23 +63,35 @@ dataRequest: fxn
  return {data:dataValue,color:colorValue}:Object
 */ 
 const dataRequest = async (datapoints,method) =>{
-        
-        const data = 
-            await 
-                fetch(`backend:5000/charts/n=${datapoints.toString()}`,
-                      {
-                             method:method
-                      })
-                      .then(res =>  res.json())
-                      .then(
-                            res =>Object.assign(
-                                     {},
-                                     {
-                                     data:res.data, 
-                                     color:res.color}
-                                     ))
-        
-        return data
+
+    // To deal with wherever the request is made from i.e container at frontend:3000 or 
+    // host at localhost:3001 sending to backend:5000 or localhost:5001.
+    // See docker-compose.yml for randomdatasets to understand more.
+    let host,port;
+    if (window.location.host ==="localhost:3001") {
+        host="localhost";
+        port="5001"
+    }else{
+        host="backend";
+        port="5000"
+    }
+
+     
+    const data = await fetch(`http://${host}:${port}/charts/n=${datapoints.toString()}`,
+            {  
+                method:method
+            })
+            .then(res =>  res.json())
+            .then(
+                    res =>Object.assign(
+                            {},
+                            {
+                            data:res.data, 
+                            color:res.color}
+                            ))
+
+    return data
+
 }
 
  /* 
@@ -149,7 +161,7 @@ initializeState: fxn
 export const initializeState =  () => {
     return async (dispatch,getState)=>{
         sendAction(dispatch,types.LOADING)
-        console.log(`datapoints now ${getState().dataPoints}`)
+        
         const res = await dataRequest(getState().dataPoints,'GET')    
         sendAction(dispatch,types.UPDATE_FIRST_DATASET,res)
 
