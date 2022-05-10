@@ -10,4 +10,4 @@ In order to build the image for the frontend you can use:
 `docker build -t image-name:image-version . `
 
 or to pull the already built image you can use:  
-`docker pull truphenak/randomdatasets-react-frontend:1.0.0`
+`docker pull truphenak/randomdatasets-react-frontend:1.1.0`
